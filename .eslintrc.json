@@ -1,58 +1,66 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es6": true
+  },
+  "globals": {
+    "JSX": true
   },
   "extends": [
-    "plugin:react/recommended",
-    "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "plugin:import/typescript"
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:react/recommended",
+    "prettier"
   ],
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "path": ["src"]
-      }
-    }
-  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "project": "./tsconfig.json"
   },
   "plugins": [
+    "@typescript-eslint",
+    "import",
+    "prettier",
     "react",
-    "@typescript-eslint"
+    "react-hooks"
   ],
+  "reportUnusedDisableDirectives": true,
   "rules": {
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [
-          ".tsx",
-          ".ts"
-        ]
-      }
-    ],
-    "import/extensions": [
+    "@typescript-eslint/no-base-to-string": [
       "error",
-      "ignorePackages",
-      {
-        "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
-      }
+      { "ignoredTypeNames": ["AxiosError", "Error"] }
     ],
-    "react/function-component-definition": [
-      2,
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/promise-function-async": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "arrow-body-style": ["error", "as-needed"],
+    "func-style": ["error", "expression"],
+    "import/order": "off",
+    "no-undef": "error",
+    "no-unused-vars": "error",
+    "react/jsx-curly-brace-presence": ["error", "never"],
+    "react/prop-types": "off",
+    "react/self-closing-comp": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "sort-imports": "off",
+    "no-restricted-imports": [
+      "error",
       {
-        "namedComponents": "arrow-function"
+        "paths": ["lodash", "react-router"]
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
   }
 }

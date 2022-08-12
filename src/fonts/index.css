@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'ProximaNova';
+  font-style: normal;
+  font-weight: 400;
+  src: local('ProximaNova'), url('./ProximaNova-Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-style: normal;
+  font-weight: 500;
+  src: local('ProximaNova'),
+    url('./ProximaNova-Semibold.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNova Alt';
+  font-style: normal;
+  font-weight: 400;
+  src: local('ProximaNova Alt'),
+    url('./ProximaNovaAlt-Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNova Alt';
+  font-style: normal;
+  font-weight: 500;
+  src: local('ProximaNova Alt'),
+    url('./ProximaNovaAlt-Semibold.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNova Osc';
+  font-style: normal;
+  font-weight: 400;
+  src: local('ProximaNova Osc'),
+    url('./ProximaNovaScOsf-Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNova Osc';
+  font-style: normal;
+  font-weight: 500;
+  src: local('ProximaNova Osc'),
+    url('./ProximaNovaScOsf-Semibold.otf') format('opentype');
+  font-display: swap;
+}

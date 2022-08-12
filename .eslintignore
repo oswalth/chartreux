@@ -1,0 +1,6 @@
+build/
+lib/
+/public/
+node_modules/
+tests/setupTests.ts
+tsconfig.json
