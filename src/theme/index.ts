@@ -2,7 +2,7 @@ import '../fonts/index.css'
 import '@mui/styles';
 
 import { Theme } from '@mui/material'
-import { alpha, createTheme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
 import { PROXIMA_NOVA_ALT_FONT, typography } from './typography'
 import { Color } from './variables'
@@ -154,7 +154,7 @@ export const theme = createTheme({
         root: {
           height: 48,
           padding: '22px 12px 6px',
-          background: `${alpha(Color.PrimaryPurple, 0.05)} !important`,
+          background: 'transparent',
           borderRadius: '4px 4px 0 0',
         },
         input: {

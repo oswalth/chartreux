@@ -1,27 +1,13 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableFooter,
-  TableHead,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
-import React from 'react';
+import React, {useEffect} from 'react';
+import DataGrid from '../../components/common/DataGrid';
+import DataGridPagination from '../../components/common/DataGridPagination';
+import SearchBar from '../../components/common/SearchBar';
 import Layout from '../../components/layouts';
-import { clients } from '../../data';
+import { clients as clientsData } from '../../data';
+import {ClientType} from '../../types/clients';
+import {ColumnType} from '../../types/dataGrid';
 
-interface Column {
-  id: 'firstName' | 'lastName' | 'email' | 'phoneNumber' | 'employer' | 'accessCode' | 'isActive';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  format?: (value: any) => string;
-}
-
-const columns: readonly Column[] = [
+const columns: ColumnType[] = [
   { id: 'firstName', label: 'First Name', minWidth: 170 },
   { id: 'lastName', label: 'Last Name', minWidth: 100 },
   {
@@ -54,84 +40,103 @@ const columns: readonly Column[] = [
     minWidth: 30,
     format: (value) => (value ? '✅' : '❌'),
   },
-  {
-    id: 'accessCode',
-    label: 'Access Code',
-    minWidth: 170,
-    align: 'right',
-  },
-  {
-    id: 'accessCode',
-    label: 'Access Code',
-    minWidth: 170,
-    align: 'right',
-  },
 ];
 
+const clientsLookups = [
+  {
+    value: 'firstName',
+    label: 'First Name',
+  },
+  {
+    value: 'lastName',
+    label: 'Last Name',
+  },
+  {
+    value: 'email',
+    label: 'Email',
+  },
+]
+
+const defaultRowsPerPage = 5;
+
 const Home: React.FC = () => {
+  // const toggleSort = (event) => {
+  //   const column = event.target.value;
+  //
+  //   if (sort === column) {
+  //     if (sortDir === 'asc') {
+  //       setSortDir('desc')
+  //     } else {
+  //       setSort(null);
+  //       setSortDir('asc')
+  //     }
+  //   } else {
+  //     setSort(column);
+  //   }
+  // }
+  const [clients, setClients] = React.useState<ClientType[]>([])
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(defaultRowsPerPage);
+  const [selectedLookup, setSelectedLookup] = React.useState(clientsLookups[0].value);
+  const [searchValue, setSearchValue] = React.useState('');
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  useEffect(() => {
+    console.log('loading first')
+    loadData();
+  }, [])
+
+  const search = (searchValue: string, lookupField: string) => {
+    setClients(clientsData.filter(client => String(client[lookupField as keyof ClientType]).startsWith(searchValue)))
+  }
+
+  const loadData = (offset = 0, limit = defaultRowsPerPage) => {
+    const newClients = clientsData.slice(offset, offset + limit);
+    console.log(newClients);
+    setClients(newClients);
+  }
+
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
+    loadData(newPage * rowsPerPage, rowsPerPage)
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
+  const handleChangeRowsPerPage = (newRowsPerPage: number) => {
+    setRowsPerPage(newRowsPerPage);
     setPage(0);
+    loadData(0, newRowsPerPage);
   };
+
+  const handleLookupChange = (lookup: string) => {
+    setSelectedLookup(lookup);
+    search(searchValue, lookup)
+  }
+
+  const handleSearchValueChange = (value: string) => {
+    setSearchValue(value)
+    search(value, selectedLookup)
+  }
 
   return (
     <Layout header="Index">
       <>
-        <Paper sx={{ width: '100%' }}>
-          <TableContainer sx={{ maxHeight: '600px', overflowX: 'auto' }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {clients
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id} onClick={() => console.log(row.id)}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TableFooter>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={clients.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </TableFooter>
-        </Paper>
+        <SearchBar
+          searchValue={searchValue}
+          handleSearchValueChange={handleSearchValueChange}
+          lookups={clientsLookups}
+          selectedLookup={selectedLookup}
+          handleLookupChange={handleLookupChange}
+        />
+        <DataGrid
+          columns={columns}
+          data={clients}
+        />
+        <DataGridPagination
+          totalCount={clientsData.length}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </>
     </Layout>
   );

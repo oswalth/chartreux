@@ -1,4 +1,4 @@
-export interface Client {
+export interface ClientType {
   id: string
   firstName: string
   lastName: string
@@ -8,4 +8,3 @@ export interface Client {
   accessCode: string
   isActive: boolean
 }
-
